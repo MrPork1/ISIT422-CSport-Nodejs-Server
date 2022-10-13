@@ -1,5 +1,8 @@
 const {MongoClient} = require('mongodb');
 
+
+
+
 async function main(){
   /**
    * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
@@ -14,8 +17,17 @@ async function main(){
       // Connect to the MongoDB cluster
       await client.connect();
 
-      // Make the appropriate DB calls
-      await  listDatabases(client);
+      
+      //put into the funciton and then added to the db
+      await creatCustomer(client,
+        {
+            Email:"sample2@gmail.com",
+            Username:"user2",
+            Fname:"Ban",
+            Lname:"Eish",  
+            Role: 2,
+        }
+    );
 
   } catch (e) {
       console.error(e);
@@ -26,12 +38,27 @@ async function main(){
 }
 main().catch(console.error);
 
-async function listDatabases(client){
-  databasesList = await client.db().admin().listDatabases();
+async function creatCustomer(client, newCust){
+  const result = await client.db("CSportsDB").collection("UserCollection").insertOne(newCust);
+  console.log(`New  created with the following id: ${result.insertedId}`);
+}
 
-  console.log("Databases:");
-  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
+
+
+
+
+
+
+
+
+
+
+// async function listDatabases(client){
+//   databasesList = await client.db().admin().listDatabases();
+
+//   console.log("Databases:");
+//   databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+// };
 
 
 // const http = require('http');
