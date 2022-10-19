@@ -29,25 +29,25 @@ async function run() {
   }
 }
 
-// async function run() {
-//   const uri = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/?retryWrites=true&w=majority";
+ async function run() {
+   const uri = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/?retryWrites=true&w=majority";
 
 
-//   const client = new MongoClient(uri);
-//   try {
-//     const database = client.db("CSportsDB");
-//     const custies = database.collection("UserCollection");
+   const client = new MongoClient(uri);
+   try {
+     const database = client.db("CSportsDB");
+     const custies = database.collection("UserCollection");
 
-//     async function findCustomer(client,findCust);
+     async function findCustomer(client,findCust);
 
-//     const findCust = await custies.findOne(options);
+     const findCust = await custies.findOne(options);
 
-//     // since this method returns the matched document, not a cursor, print it directly
-//     console.log(findCust);
-//   } finally {
-//     await client.close();
-//   }
-// }
-// run().catch(console.dir);
+     // since this method returns the matched document, not a cursor, print it directly
+     console.log(findCust);
+   } finally {
+     await client.close();
+   }
+}
+ run().catch(console.dir);
 
 run().catch(console.dir);
