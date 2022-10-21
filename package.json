@@ -18,6 +18,6 @@
   "homepage": "https://github.com/JaegyeomKim/ISIT422-CSport-Nodejs-Server#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^6.6.5"
+    "mongoose": "^6.6.6"
   }
 }

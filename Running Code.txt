@@ -3,7 +3,7 @@
 
 node app.js
 
-
+OneDrive\Documents\School\Fall 2022\ISIT 422\ISIT422-CSport-Nodejs-Server
 import { MongoClient } from "mongodb";
 // Replace the uri string with your MongoDB deployment's connection string.
 const uri = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/?retryWrites=true&w=majority";

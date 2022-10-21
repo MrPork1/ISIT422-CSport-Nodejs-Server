@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express(),
         port = 3000;
+        //app.use(require("cors")()) // allow Cross-domain requests 
+        app.use(require('body-parser').json()) // When someone sends something to the server, we can recieve it in JSON format
+
 
     
       
@@ -11,7 +14,8 @@ const app = express(),
 // .ADO.Net is a wrapper over raw SQL server interface
 const mongoose = require("mongoose");
 
-const appUser = require("../Users");
+const appUser = require("../usercollections");
+const appUser2 = require("../classcollections");
 
 // edited to include my non-admin, user level account and PW on mongo atlas
 // and also to include the name of the mongo DB that the collection is in (TaskDB)
@@ -37,7 +41,7 @@ mongoose.connect(dbURI, options).then(
   }
 );
 /* GET all users . */
-app.get('/Users', function(req, res) {
+app.get('/usercollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
   appUser.find({}, (err, AllUsers) => {
     if (err) {
@@ -61,6 +65,18 @@ app.post('/NewUser', function(req, res) {
     console.log(user);
     res.status(201).json(user);
     }
+  });
+});
+/* GET all classes . */
+app.get('/classcollections', function(req, res) {
+  // find {  takes values, but leaving it blank gets all}
+  appUser2.find({}, (err, AllClass) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(AllClass);
+    res.status(200).json(AllClass);
   });
 });
 module.exports = app;

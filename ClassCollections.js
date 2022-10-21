@@ -8,23 +8,36 @@ const mongoose = require("mongoose");
 // schema will enforce consistency in all our documents (records)
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-  Email: {
+const ClassSchema = new Schema({
+  CID:{
     type: String,
     required: true
   },
-  Fname: {
+  Name: {
     type: String,
     required: true
   },
-  Lname: {
+  Descript: {
     type: String,
     required: true
   },
-  Role: {
+  STime: {
     type: String,
+    required: true
+  },
+  ETime: {
+    type: String,
+    required: true
+    
+  },
+  Date: {
+    type: String,
+    required: true
+  },
+  ClassSeats: {
+    type: Array,
     required: true
   }
 });
 
-module.exports = mongoose.model("Users", UserSchema);
+module.exports = mongoose.model("classcollections", ClassSchema);

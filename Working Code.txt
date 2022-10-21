@@ -1,5 +1,6 @@
-Code for adding to the database
-____________________________________________________________________________________________________
+
+//Code for adding USERS to the database
+//____________________________________________________________________________________________________
 const {MongoClient} = require('mongodb');
 async function main(){
   /**
@@ -19,11 +20,15 @@ async function main(){
       //put into the funciton and then added to the db
       await creatCustomer(client,
         {
-            Email:"gogo@gmail.com",
-            Username:"girl",
-            Fname:"Mallie",
-            Lname:"Bussin",  
+            UID: "tyvrfecbj832900gh8", 
+            Fname:"Usyless",
+            Lname:"Smoth",
+            ClassIDList: ["10doksla749203","yubdamk3918340"],
+            ClassHistory:["Begining Abs 10/10/2022","Intro Swimming 10/13/2022"],
+            Birthday:"04/20/1990",  
+            Email:"neatgirl@gmail.com",
             Role: 2,
+            AdminNotes: "Allergic to dilfs and chalk. Remove all chalk and hot dads before session"
         }
     );
 
@@ -41,7 +46,57 @@ main().catch(console.error);
 //adds a new custmoer into db, sends a meesage to console 
 
  async function creatCustomer(client, newCust){
-   const result = await client.db("CSportsDB").collection("UserCollection").insertOne(newCust);
+   const result = await client.db("CSportsDB").collection("usercollection").insertOne(newCust);
+   console.log(`New  created with the following id: ${result.insertedId}`);
+ }
+
+
+//Code for adding CLASSES to the database
+//____________________________________________________________________________________________________
+const {MongoClient} = require('mongodb');
+async function main(){
+  /**
+   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
+   */
+  const uri = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/?retryWrites=true&w=majority";
+
+
+  const client = new MongoClient(uri);
+ 
+  try {
+      // Connect to the MongoDB cluster
+      await client.connect();
+
+      
+      //put into the funciton and then added to the db
+      await creatClass(client,
+        {
+            CID: "tyvrfecbj832900gh8", 
+            Name:"Basic Adult Swimming",
+            Descript:"For new swimmmers or those with trauma around the water.",
+            STime:"3:00 PM" ,
+            ETime:"4:00 PM",
+            Date:"11/21/2022",  
+            ClassSeats: "Allergic to dilfs and chalk. Remove all chalk and hot dads before session"
+        }
+    );
+
+
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
+  }
+}
+main().catch(console.error);
+
+
+
+//adds a new custmoer into db, sends a meesage to console 
+
+ async function creatClass(client, newClass){
+   const result = await client.db("CSportsDB").collection("classcollections").insertOne(newClass);
    console.log(`New  created with the following id: ${result.insertedId}`);
  }
 
