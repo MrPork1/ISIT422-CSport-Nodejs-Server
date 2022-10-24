@@ -16,6 +16,7 @@ const mongoose = require("mongoose");
 
 const appUser = require("../usercollections");
 const appUser2 = require("../classcollections");
+const { application } = require('express');
 
 // edited to include my non-admin, user level account and PW on mongo atlas
 // and also to include the name of the mongo DB that the collection is in (TaskDB)
@@ -53,7 +54,7 @@ app.get('/usercollections', function(req, res) {
   });
 });
 /* post a new User and push to Mongo */
-app.post('/NewUser', function(req, res) {
+app.post('/userscollection', function(req, res) {
 
   let oneNewUser = new Users(req.body);  
   console.log(req.body);
@@ -67,6 +68,33 @@ app.post('/NewUser', function(req, res) {
     }
   });
 });
+
+// delete one User
+// _id is the id genterated for the user
+app.delete('/DeleteUser/:id', function (req, res) {
+  appUser.deleteOne({ _id: req.params.id }, (err, note) => { 
+    if (err) {
+      res.status(404).send(err);
+    }
+    res.status(200).json({ message: "User successfully deleted" });
+  });
+});
+
+// Make Mongoose use `findOneAndUpdate()`. 
+// update one User
+app.put('/EditUser/:id', function (req, res) {
+  var which = (req.body).id;   // get the -id from the object passed up, ignore rest of it
+  appUser.findOneAndUpdate(
+    { _id: which },  
+    { Birthday: "00/00/00" },   // ignore the value of the User's Birthday, just force it to 00/00/00
+    (err, user) => {
+      if (err) {
+        res.status(500).send(err);
+    }
+    res.status(200).json(user);
+    })
+  });
+
 /* GET all classes . */
 app.get('/classcollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
@@ -79,4 +107,47 @@ app.get('/classcollections', function(req, res) {
     res.status(200).json(AllClass);
   });
 });
+/* post a new Class and push to Mongo */
+app.post('/classcollections', function(req, res) {
+
+  let oneNewClass = new Class(req.body);  
+  console.log(req.body);
+  oneNewClass.save((err, clas) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+    console.log(clas);
+    res.status(201).json(clas);
+    }
+  });
+});
+
+
+// delete one Class
+app.delete('/DeleteClass/:CID', function (req, res) {
+  appUser2.deleteOne({ CID: req.params.id }, (err, note) => { 
+    if (err) {
+      res.status(404).send(err);
+    }
+    res.status(200).json({ message: "Class successfully deleted" });
+  });
+});
+
+// Make Mongoose use `findOneAndUpdate()`. 
+// update one Class
+app.put('/EditClass', function (req, res) {
+  var which = (req.body).CID;   // get the -CID from the object passed up, ignore rest of it
+  appUser2.findOneAndUpdate(
+    { CID: which },  
+    { Stime: "2:16 PM" },   // ignore the value of the object's Start Time, just force it to 2:16 PM
+    (err, clas) => {
+      if (err) {
+        res.status(500).send(err);
+    }
+    res.status(200).json(clas);
+    })
+  });
+
 module.exports = app;
+

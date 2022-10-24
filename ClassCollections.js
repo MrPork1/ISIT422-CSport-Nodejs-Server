@@ -35,7 +35,7 @@ const ClassSchema = new Schema({
     required: true
   },
   ClassSeats: {
-    type: Array,
+    type: String,
     required: true
   }
 });

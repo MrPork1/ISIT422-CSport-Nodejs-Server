@@ -24,11 +24,11 @@ const UserSchema = new Schema({
   },
   ClassIDList: {
     type: Array,
-    required: true
+    required: false
   },
   ClassHistory: {
     type: Array,
-    required: true
+    required: false
   },
   Birthday: {
     type: String,
@@ -40,11 +40,11 @@ const UserSchema = new Schema({
   },
   Role: {
     type: String,
-    required: true
+    required: false
   },
   AdminNotes: {
     type: String,
-    required: true
+    required: false
   }
 });
 
