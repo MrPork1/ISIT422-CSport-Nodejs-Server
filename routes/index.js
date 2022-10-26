@@ -12,6 +12,14 @@ const app = express(),
       });
 // mongoose is a API wrapper overtop of mongodb, just like
 // .ADO.Net is a wrapper over raw SQL server interface
+app.use((req, res, next) => {​​​​​​​​
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
+  next();
+  }​​​​​​​​);
+  
+
 const mongoose = require("mongoose");
 
 const appUser = require("../usercollections");
@@ -56,7 +64,7 @@ app.get('/usercollections', function(req, res) {
 /* post a new User and push to Mongo */
 app.post('/userscollection', function(req, res) {
 
-  let oneNewUser = new Users(req.body);  
+  let oneNewUser = new appUser(req.body);  
   console.log(req.body);
   oneNewUser.save((err, user) => {
     if (err) {
@@ -110,7 +118,7 @@ app.get('/classcollections', function(req, res) {
 /* post a new Class and push to Mongo */
 app.post('/classcollections', function(req, res) {
 
-  let oneNewClass = new Class(req.body);  
+  let oneNewClass = new appUser2(req.body);  
   console.log(req.body);
   oneNewClass.save((err, clas) => {
     if (err) {
