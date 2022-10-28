@@ -12,13 +12,12 @@ const app = express(),
       });
 // mongoose is a API wrapper overtop of mongodb, just like
 // .ADO.Net is a wrapper over raw SQL server interface
-app.use((req, res, next) => {​​​​​​​​
-  res.header("Access-Control-Allow-Origin", "*");
+app.use((req, res, next) => 
+{ res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
   next();
-  }​​​​​​​​);
-  
+});
 
 const mongoose = require("mongoose");
 
@@ -49,6 +48,19 @@ mongoose.connect(dbURI, options).then(
     console.log("Error connecting Database instance due to: ", err);
   }
 );
+/* GET one user . */
+app.get('/GetOneUser/:UID', function(req, res) {
+  // find { 9239290210} works but not just UID
+  
+  appUser.find({UID: req.params.UID}, (err, OneUser) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(OneUser);
+    res.status(200).json(OneUser);
+  });
+});
 /* GET all users . */
 app.get('/usercollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
@@ -80,21 +92,30 @@ app.post('/userscollection', function(req, res) {
 // delete one User
 // _id is the id genterated for the user
 app.delete('/DeleteUser/:id', function (req, res) {
-  appUser.deleteOne({ _id: req.params.id }, (err, note) => { 
+  appUser.deleteOne({ _id: req.params._id }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
     }
-    res.status(200).json({ message: "User successfully deleted" });
+    res.status(200).json({ message: "User successfully (maybe) deleted" });
   });
 });
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one User
 app.put('/EditUser/:id', function (req, res) {
-  var which = (req.body).id;   // get the -id from the object passed up, ignore rest of it
+  var which = (req.body)._id;   // get the -id from the object passed up, ignore rest of it
   appUser.findOneAndUpdate(
     { _id: which },  
-    { Birthday: "00/00/00" },   // ignore the value of the User's Birthday, just force it to 00/00/00
+    { 
+    UID: req.body.UID ,  
+    Fname: req.body.Fname, //req=requires body=html from angular Fname=first name info from angular
+    Lname: req.body.Lname,
+    ClassIDList: req.body.ClassIDList,
+    ClassHistory:req.body.ClassHistory ,
+    Birthday: req.body.Birthday,
+    Email:  req.body.Email,
+    Role: req.body.Role,
+    AdminNotes:req.body.AdminNotes },   // ignore the value of the User's Birthday, just force it to 00/00/00
     (err, user) => {
       if (err) {
         res.status(500).send(err);
@@ -102,7 +123,19 @@ app.put('/EditUser/:id', function (req, res) {
     res.status(200).json(user);
     })
   });
-
+/* GET one class . */
+app.get('/GetOneClass/:_id', function(req, res) {
+  // for some reason CID would not work, maybe b/c 
+  //currently the CID's are random and not uniform 10/27 HN
+  appUser2.find({_id: req.params._id }, (err, OneClass) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(OneClass);
+    res.status(200).json(OneClass);
+  });
+});
 /* GET all classes . */
 app.get('/classcollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
@@ -134,21 +167,27 @@ app.post('/classcollections', function(req, res) {
 
 // delete one Class
 app.delete('/DeleteClass/:CID', function (req, res) {
-  appUser2.deleteOne({ CID: req.params.id }, (err, note) => { 
+  appUser2.deleteOne({ CID: req.params.CID }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
     }
-    res.status(200).json({ message: "Class successfully deleted" });
+    res.status(200).json({ message: "Class successfully (maybe) deleted" });
   });
 });
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one Class
-app.put('/EditClass', function (req, res) {
+app.put('/EditClass/:id', function (req, res) {
   var which = (req.body).CID;   // get the -CID from the object passed up, ignore rest of it
   appUser2.findOneAndUpdate(
     { CID: which },  
-    { Stime: "2:16 PM" },   // ignore the value of the object's Start Time, just force it to 2:16 PM
+    {   
+    Name: req.body.Name,
+    Descript: req.body.Descript,
+    STime: req.body.STime,
+    ETime: req.body.ETinme,
+    Date:req.body.Date ,
+    ClassSeats: req.body.ClassSeats},   // ignore the value of the object's Start Time, just force it to 2:16 PM
     (err, clas) => {
       if (err) {
         res.status(500).send(err);
