@@ -91,7 +91,7 @@ app.post('/userscollection', function(req, res) {
 
 // delete one User
 // _id is the id genterated for the user
-app.delete('/DeleteUser/:id', function (req, res) {
+app.delete('/DeleteUser/:_id', function (req, res) {
   appUser.deleteOne({ _id: req.params._id }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
@@ -102,12 +102,12 @@ app.delete('/DeleteUser/:id', function (req, res) {
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one User
-app.put('/EditUser/:id', function (req, res) {
-  var which = (req.body)._id;   // get the -id from the object passed up, ignore rest of it
+app.put('/EditUser', function (req, res) {
+  var which = (req.body).UID;   // get the -id from the object passed up, ignore rest of it
   appUser.findOneAndUpdate(
-    { _id: which },  
+    { UID: which },  
     { 
-    UID: req.body.UID ,  
+      
     Fname: req.body.Fname, //req=requires body=html from angular Fname=first name info from angular
     Lname: req.body.Lname,
     ClassIDList: req.body.ClassIDList,
@@ -125,8 +125,8 @@ app.put('/EditUser/:id', function (req, res) {
   });
 /* GET one class . */
 app.get('/GetOneClass/:_id', function(req, res) {
-  // for some reason CID would not work, maybe b/c 
-  //currently the CID's are random and not uniform 10/27 HN
+  // for some reason _id would not work, maybe b/c 
+  //currently the _id's are random and not uniform 10/27 HN
   appUser2.find({_id: req.params._id }, (err, OneClass) => {
     if (err) {
       console.log(err);
@@ -166,8 +166,9 @@ app.post('/classcollections', function(req, res) {
 
 
 // delete one Class
-app.delete('/DeleteClass/:CID', function (req, res) {
-  appUser2.deleteOne({ CID: req.params.CID }, (err, note) => { 
+// since we are taking the info from the params we need to pass the _id in the URl
+app.delete('/DeleteClass/:_id', function (req, res) {
+  appUser2.deleteOne({ _id: req.params._id }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
     }
@@ -177,10 +178,10 @@ app.delete('/DeleteClass/:CID', function (req, res) {
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one Class
-app.put('/EditClass/:id', function (req, res) {
-  var which = (req.body).CID;   // get the -CID from the object passed up, ignore rest of it
+app.put('/EditClass', function (req, res) {
+  var which = (req.body)._id;   // get the -_id from the object passed up, ignore rest of it
   appUser2.findOneAndUpdate(
-    { CID: which },  
+    { _id: which },  
     {   
     Name: req.body.Name,
     Descript: req.body.Descript,
