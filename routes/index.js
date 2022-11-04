@@ -116,8 +116,8 @@ app.post('/userscollection', function(req, res) {
 
 // delete one User
 // _id is the id genterated for the user
-app.delete('/DeleteUser/:_id', function (req, res) {
-  appUser.deleteOne({ _id: req.params._id }, (err, note) => { 
+app.delete('/DeleteUser/:UID', function (req, res) {
+  appUser.deleteOne({ UID: req.params.UID }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
     }
