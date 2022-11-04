@@ -1,4 +1,6 @@
 const express = require('express');
+const admin = require('firebase-admin');
+const serviceAccount = require("../firebaseAccountKey.json");
 const app = express(),
         port = 3000;
         //app.use(require("cors")()) // allow Cross-domain requests 
@@ -17,6 +19,10 @@ app.use((req, res, next) =>
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
   next();
+});
+
+const adminHere = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const mongoose = require("mongoose");
@@ -48,6 +54,25 @@ mongoose.connect(dbURI, options).then(
     console.log("Error connecting Database instance due to: ", err);
   }
 );
+
+// Delete one User from mongoDB and Firebase
+app.delete('/DeleteUser2/:UID', function (req, res) {
+  let uidHere = req.params.UID;
+  appUser.deleteOne({ UID: req.params.UID }, (err, note) => { 
+    if (err) {
+      res.status(404).send(err);
+    } else {
+      adminHere.auth().deleteUser(uidHere)
+      .then(() => {
+        console.log("Deleted user from firebase!");
+      })
+      .catch((error) => {
+        console.log("Problem with deleting user from firebase", error);
+      });
+    }
+  });
+});
+
 /* GET one user . */
 app.get('/GetOneUser/:UID', function(req, res) {
   // find { 9239290210} works but not just UID
