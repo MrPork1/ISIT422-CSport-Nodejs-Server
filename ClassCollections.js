@@ -37,6 +37,10 @@ const ClassSchema = new Schema({
   ClassSeats: {
     type: String,
     required: true
+  },
+  Price: {
+    type: Number,
+    required: false
   }
 });
 
