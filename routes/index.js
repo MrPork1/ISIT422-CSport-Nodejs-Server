@@ -65,6 +65,7 @@ app.delete('/DeleteUser2/:UID', function (req, res) {
       adminHere.auth().deleteUser(uidHere)
       .then(() => {
         console.log("Deleted user from firebase!");
+        res.status(200).json({ message: "User successfully (maybe) deleted" });
       })
       .catch((error) => {
         console.log("Problem with deleting user from firebase", error);
