@@ -214,7 +214,8 @@ app.put('/EditClass', function (req, res) {
     STime: req.body.STime,
     ETime: req.body.ETinme,
     Date:req.body.Date ,
-    ClassSeats: req.body.ClassSeats},   // ignore the value of the object's Start Time, just force it to 2:16 PM
+    ClassSeats: req.body.ClassSeats,
+    Price: req.body.Price},   // ignore the value of the object's Start Time, just force it to 2:16 PM
     (err, clas) => {
       if (err) {
         res.status(500).send(err);
