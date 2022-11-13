@@ -11,7 +11,7 @@ const Schema = mongoose.Schema;
 const ClassSchema = new Schema({
   CID:{
     type: String,
-    required: true
+    required: false
   },
   Name: {
     type: String,
