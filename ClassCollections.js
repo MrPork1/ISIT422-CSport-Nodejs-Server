@@ -40,7 +40,7 @@ const ClassSchema = new Schema({
   },
   Price: {
     type: Number,
-    required: false
+    required: true
   }
 });
 
