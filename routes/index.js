@@ -29,6 +29,7 @@ const mongoose = require("mongoose");
 
 const appUser = require("../usercollections");
 const appUser2 = require("../classcollections");
+const appUser3 = require("../transactioncollection");
 const { application } = require('express');
 
 // edited to include my non-admin, user level account and PW on mongo atlas
@@ -138,6 +139,7 @@ app.put('/EditUser', function (req, res) {
     Lname: req.body.Lname,
     ClassIDList: req.body.ClassIDList,
     ClassHistory:req.body.ClassHistory ,
+    TransactionHistory:req.body.TransactionHistory,
     Birthday: req.body.Birthday,
     Email:  req.body.Email,
     Role: req.body.Role,
@@ -223,6 +225,35 @@ app.put('/EditClass', function (req, res) {
     res.status(200).json(clas);
     })
   });
+
+  /* post a new Transaction and push to Mongo */
+app.post('/transactioncollection', function(req, res) {
+
+  let oneNewPayment = new appUser3(req.body);  
+  console.log(req.body);
+  oneNewPayment.save((err, transaction) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+    console.log(transaction);
+    res.status(201).json(transaction);
+    }
+  });
+});
+
+/* GET all Transactions . */
+app.get('/transactioncollections', function(req, res) {
+  // find {  takes values, but leaving it blank gets all}
+  appUser3.find({}, (err, AllTransaction) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(AllTransaction);
+    res.status(200).json(AllTransaction);
+  });
+});
 
 module.exports = app;
 

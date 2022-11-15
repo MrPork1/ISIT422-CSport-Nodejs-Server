@@ -30,6 +30,10 @@ const UserSchema = new Schema({
     type: Array,
     required: false
   },
+  TransactionHistory: {
+    type: Array,
+    required: false
+  },
   Birthday: {
     type: String,
     required: true
@@ -40,7 +44,7 @@ const UserSchema = new Schema({
   },
   Role: {
     type: String,
-    required: false
+    required: true
   },
   AdminNotes: {
     type: String,
