@@ -47,14 +47,24 @@ const options = {
   useNewUrlParser: true
 }
 
+var connected = false;
+
 mongoose.connect(dbURI, options).then(
   () => {
     console.log("Database connection established!");
+    connected = true;
   },
   err => {
     console.log("Error connecting Database instance due to: ", err);
   }
 );
+
+/* GET Connection Status from MongoDB */
+app.get('/ConnectionStatus', function(req, res) {
+  if (connected) {
+    res.status(200).json("Connected!");
+  }
+});
 
 // Delete one User from mongoDB and Firebase
 app.delete('/DeleteUser2/:UID', function (req, res) {
