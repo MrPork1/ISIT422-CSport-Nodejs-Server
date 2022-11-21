@@ -264,6 +264,33 @@ app.get('/transactioncollections', function(req, res) {
     res.status(200).json(AllTransaction);
   });
 });
-
+  // delete one Transaction
+  // since we are taking the info from the params we need to pass the _id in the URl
+  app.delete('/DeleteTransaction/:_id', function (req, res) {
+    appUser3.deleteOne({ _id: req.params._id }, (err, note) => { 
+      if (err) {
+        res.status(404).send(err);
+      }
+      res.status(200).json({ message: "Transaction successfully (maybe) deleted" });//will post just b/c the file was ran
+    });
+  });
+  
+  // Make Mongoose use `findOneAndUpdate()`. 
+  // update one Transaction
+  // This code changes the status to paid after a transaction (will be more useful when we change to month to month)
+  app.put('/EditTransaction', function (req, res) {
+    var which = (req.body)._id;   // get the -_id from the object passed up, ignore rest of it
+    appUser3.findOneAndUpdate(
+      { _id: which },  
+      {   
+      PStatus: req.body.PStatus,
+      },   
+      (err, trans) => {
+        if (err) {
+          res.status(500).send(err);
+      }
+      res.status(200).json(trans);
+      })
+    });
 module.exports = app;
 

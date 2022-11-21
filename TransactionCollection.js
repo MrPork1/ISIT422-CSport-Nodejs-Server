@@ -20,6 +20,10 @@ const PaymentSchema = new Schema({
   Price: {
     type: Number,
     required: true
+  },
+  PStatus: {
+    type: String,
+    required: true
   }
 });
 
