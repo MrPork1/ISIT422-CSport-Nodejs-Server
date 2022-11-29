@@ -5,21 +5,17 @@ const app = express(),
         port = 3000;
         //app.use(require("cors")()) // allow Cross-domain requests 
         app.use(require('body-parser').json()) // When someone sends something to the server, we can recieve it in JSON format
-
-
-    
-      
       app.listen(port, () => {
           console.log(`Server running at http://${port}/`);
       });
 // mongoose is a API wrapper overtop of mongodb, just like
 // .ADO.Net is a wrapper over raw SQL server interface
-app.use((req, res, next) => 
-{ res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
-  next();
-});
+// app.use((req, res, next) => 
+// { res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
+//   next();
+// });
 
 const adminHere = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

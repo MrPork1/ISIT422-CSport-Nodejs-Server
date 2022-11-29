@@ -1,75 +1,62 @@
-const {MongoClient} = require('mongodb');
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
+var routeindex = require('./routes/index');
 
-async function main(){
-  /**
-   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
-   */
-  const uri = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/?retryWrites=true&w=majority";
+const cors = require('cors');
 
-
-  const client = new MongoClient(uri);
-
-  try {
-      // Connect to the MongoDB cluster
-      await client.connect();
-
-      
-      //put into the funciton and then added to the db
-      await creatCustomer(client,
-        {
-            Email:"sample2@gmail.com",
-            Username:"user2",
-            Fname:"Ban",
-            Lname:"Eish",  
-            Role: 2,
-        }
-    );
-
-  } catch (e) {
-      console.error(e);
-  } finally {
-      await client.close();
-  }
-
-}
-main().catch(console.error);
-
-async function creatCustomer(client, newCust){
-  const result = await client.db("CSportsDB").collection("UserCollection").insertOne(newCust);
-  console.log(`New  created with the following id: ${result.insertedId}`);
+var corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
 }
 
+var app = express();
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
+//app.use(cors(corsOptions));
 
+app.use('/', routeindex);
 
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
+// error handlers
 
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    //         res.render('error', {
+    //             message: err.message,
+    //             error: err
+    //         });
+  });
+}
 
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  //     res.render('error', {
+  //         message: err.message,
+  //         error: {}
+  //     });
+});
 
+module.exports = app;
 
-
-// async function listDatabases(client){
-//   databasesList = await client.db().admin().listDatabases();
-
-//   console.log("Databases:");
-//   databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-// };
-
-
-// const http = require('http');
-
-// const hostname = '127.0.0.1';
-// const port = 3000;
-
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'text/plain');
-//   res.end('Hello World');
-// });
-
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });

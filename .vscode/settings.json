@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6d25934d-ecdc-413d-9aca-4b83c7c2be96/AppServices/subscriptions/6d25934d-ecdc-413d-9aca-4b83c7c2be96/resourceGroups/CSportsML/providers/Microsoft.Web/sites/CSportsNodeML",
+    "appService.deploySubpath": "."
+}
