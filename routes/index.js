@@ -1,13 +1,9 @@
-const express = require('express');
+var express = require('express');
+var app = express.Router();
+
 const admin = require('firebase-admin');
 const serviceAccount = require("../firebaseAccountKey.json");
-const app = express(),
-        port = 3000;
-        //app.use(require("cors")()) // allow Cross-domain requests 
-        app.use(require('body-parser').json()) // When someone sends something to the server, we can recieve it in JSON format
-      app.listen(port, () => {
-          console.log(`Server running at http://${port}/`);
-      });
+
 // mongoose is a API wrapper overtop of mongodb, just like
 // .ADO.Net is a wrapper over raw SQL server interface
 // app.use((req, res, next) => 

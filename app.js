@@ -5,7 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 var routeindex = require('./routes/index');
+
 
 const cors = require('cors');
 
@@ -23,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use('/', routeindex);
 
