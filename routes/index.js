@@ -28,6 +28,7 @@ const { application } = require('express');
 // and also to include the name of the mongo DB that the collection is in (TaskDB)
 const dbURI =
   //"mongodb+srv://someone:somepw@somecluster.mongodb.net/ToDosDB?retryWrites=true&w=majority";
+ // process.env.MONGO_CS;
   "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/CSportsDB?retryWrites=true&w=majority";
 
 
@@ -36,8 +37,10 @@ const dbURI =
 const options = {
   maxPoolSize: 50, 
   wtimeoutMS: 2500,
-  useNewUrlParser: true
-}
+  useNewUrlParser: true,
+  //reconnectTries: Number.MAX_VALUE,
+  //poolSize: 10
+};
 
 var connected = false;
 
@@ -55,7 +58,12 @@ mongoose.connect(dbURI, options).then(
 app.get('/ConnectionStatus', function(req, res) {
   if (connected) {
     res.status(200).json("Connected!");
+  } else{
+    res.status(200).json("Failed to connect to Mongo!");
   }
+});
+app.get('/', function(req, res) {
+  res.status(200).json("Node is Up");
 });
 
 // Delete one User from mongoDB and Firebase
@@ -284,5 +292,5 @@ app.get('/transactioncollections', function(req, res) {
       res.status(200).json(trans);
       })
     });
-module.exports = app;
 
+module.exports = app;
