@@ -1,12 +1,20 @@
 var express = require('express');
-var router = express.Router();
+var app = express.Router();
 
 const admin = require('firebase-admin');
-const serviceAccount = require("../firebaseAccountKey.json");
+const serviceAccount = require("./firebaseAccountKey.json");
+
+// mongoose is a API wrapper overtop of mongodb, just like
+// .ADO.Net is a wrapper over raw SQL server interface
+// app.use((req, res, next) => 
+// { res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
+//   next();
+// });
 
 const adminHere = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
-  
 });
 
 const mongoose = require("mongoose");
@@ -16,13 +24,19 @@ const appUser2 = require("../ClassCollections");
 const appUser3 = require("../TransactionCollection");
 const { application } = require('express');
 
+// edited to include my non-admin, user level account and PW on mongo atlas
+// and also to include the name of the mongo DB that the collection is in (TaskDB)
 const dbURI = "mongodb+srv://iluvjuntae:somuch@haleynisit420.cj3rn.mongodb.net/CSportsDB?retryWrites=true&w=majority";
+  //"mongodb+srv://someone:somepw@somecluster.mongodb.net/ToDosDB?retryWrites=true&w=majority";
+ // process.env.MONGO_CS;
+  
+//mongoose.set('useFindAndModify', false);
 
 const options = {
   maxPoolSize: 50, 
   wtimeoutMS: 2500,
   useNewUrlParser: true,
-  //reconnectTries: Number.MAX_VALUE,
+  reconnectTries: Number.MAX_VALUE
   //poolSize: 10
 };
 
@@ -39,21 +53,19 @@ mongoose.connect(dbURI, options).then(
 );
 
 /* GET Connection Status from MongoDB */
-router.get('/ConnectionStatus', function(req, res) {
+app.get('/ConnectionStatus', function(req, res) {
   if (connected) {
     res.status(200).json("Connected!");
   } else{
     res.status(200).json("Failed to connect to Mongo!");
   }
 });
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+app.get('/', function(req, res) {
+  res.status(200).json("Node is Up");
 });
 
 // Delete one User from mongoDB and Firebase
-router.delete('/DeleteUser2/:UID', function (req, res) {
+app.delete('/DeleteUser2/:UID', function (req, res) {
   let uidHere = req.params.UID;
   appUser.deleteOne({ UID: req.params.UID }, (err, note) => { 
     if (err) {
@@ -72,7 +84,7 @@ router.delete('/DeleteUser2/:UID', function (req, res) {
 });
 
 /* GET one user . */
-router.get('/GetOneUser/:UID', function(req, res) {
+app.get('/GetOneUser/:UID', function(req, res) {
   // find { 9239290210} works but not just UID
   
   appUser.find({UID: req.params.UID}, (err, OneUser) => {
@@ -85,7 +97,7 @@ router.get('/GetOneUser/:UID', function(req, res) {
   });
 });
 /* GET all users . */
-router.get('/usercollections', function(req, res) {
+app.get('/usercollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
   appUser.find({}, (err, AllUsers) => {
     if (err) {
@@ -97,7 +109,7 @@ router.get('/usercollections', function(req, res) {
   });
 });
 /* post a new User and push to Mongo */
-router.post('/userscollection', function(req, res) {
+app.post('/userscollection', function(req, res) {
 
   let oneNewUser = new appUser(req.body);  
   console.log(req.body);
@@ -114,7 +126,7 @@ router.post('/userscollection', function(req, res) {
 
 // delete one User
 // _id is the id genterated for the user
-router.delete('/DeleteUser/:UID', function (req, res) {
+app.delete('/DeleteUser/:UID', function (req, res) {
   appUser.deleteOne({ UID: req.params.UID }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
@@ -125,7 +137,7 @@ router.delete('/DeleteUser/:UID', function (req, res) {
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one User
-router.put('/EditUser', function (req, res) {
+app.put('/EditUser', function (req, res) {
   var which = (req.body).UID;   // get the -id from the object passed up, ignore rest of it
   appUser.findOneAndUpdate(
     { UID: which },  
@@ -148,7 +160,7 @@ router.put('/EditUser', function (req, res) {
     })
   });
 /* GET one class . */
-router.get('/GetOneClass/:_id', function(req, res) {
+app.get('/GetOneClass/:_id', function(req, res) {
   // for some reason _id would not work, maybe b/c 
   //currently the _id's are random and not uniform 10/27 HN
   appUser2.find({_id: req.params._id }, (err, OneClass) => {
@@ -161,7 +173,7 @@ router.get('/GetOneClass/:_id', function(req, res) {
   });
 });
 /* GET all classes . */
-router.get('/classcollections', function(req, res) {
+app.get('/classcollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
   appUser2.find({}, (err, AllClass) => {
     if (err) {
@@ -173,7 +185,7 @@ router.get('/classcollections', function(req, res) {
   });
 });
 /* post a new Class and push to Mongo */
-router.post('/classcollections', function(req, res) {
+app.post('/classcollections', function(req, res) {
 
   let oneNewClass = new appUser2(req.body);  
   console.log(req.body);
@@ -191,7 +203,7 @@ router.post('/classcollections', function(req, res) {
 
 // delete one Class
 // since we are taking the info from the params we need to pass the _id in the URl
-router.delete('/DeleteClass/:_id', function (req, res) {
+app.delete('/DeleteClass/:_id', function (req, res) {
   appUser2.deleteOne({ _id: req.params._id }, (err, note) => { 
     if (err) {
       res.status(404).send(err);
@@ -202,7 +214,7 @@ router.delete('/DeleteClass/:_id', function (req, res) {
 
 // Make Mongoose use `findOneAndUpdate()`. 
 // update one Class
-router.put('/EditClass', function (req, res) {
+app.put('/EditClass', function (req, res) {
   var which = (req.body)._id;   // get the -_id from the object passed up, ignore rest of it
   appUser2.findOneAndUpdate(
     { _id: which },  
@@ -223,7 +235,7 @@ router.put('/EditClass', function (req, res) {
   });
 
   /* post a new Transaction and push to Mongo */
-router.post('/transactioncollection', function(req, res) {
+app.post('/transactioncollection', function(req, res) {
 
   let oneNewPayment = new appUser3(req.body);  
   console.log(req.body);
@@ -239,7 +251,7 @@ router.post('/transactioncollection', function(req, res) {
 });
 
 /* GET all Transactions . */
-router.get('/transactioncollections', function(req, res) {
+app.get('/transactioncollections', function(req, res) {
   // find {  takes values, but leaving it blank gets all}
   appUser3.find({}, (err, AllTransaction) => {
     if (err) {
@@ -252,7 +264,7 @@ router.get('/transactioncollections', function(req, res) {
 });
   // delete one Transaction
   // since we are taking the info from the params we need to pass the _id in the URl
-  router.delete('/DeleteTransaction/:_id', function (req, res) {
+  app.delete('/DeleteTransaction/:_id', function (req, res) {
     appUser3.deleteOne({ _id: req.params._id }, (err, note) => { 
       if (err) {
         res.status(404).send(err);
@@ -264,7 +276,7 @@ router.get('/transactioncollections', function(req, res) {
   // Make Mongoose use `findOneAndUpdate()`. 
   // update one Transaction
   // This code changes the status to paid after a transaction (will be more useful when we change to month to month)
-  router.put('/EditTransaction', function (req, res) {
+  app.put('/EditTransaction', function (req, res) {
     var which = (req.body)._id;   // get the -_id from the object passed up, ignore rest of it
     appUser3.findOneAndUpdate(
       { _id: which },  
@@ -279,4 +291,4 @@ router.get('/transactioncollections', function(req, res) {
       })
     });
 
-module.exports = router;
+module.exports = app;
