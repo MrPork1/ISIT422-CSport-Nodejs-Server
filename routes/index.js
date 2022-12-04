@@ -10,12 +10,12 @@ const adminHere = admin.initializeApp({
 });
 
 //Make sure to comment this out before deploying! Lines 13-18
-router.use((req, res, next) => 
-{ res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
-  next();
-});
+// router.use((req, res, next) => 
+// { res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");    
+//   next();
+// });
 
 const mongoose = require("mongoose");
 
