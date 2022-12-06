@@ -268,6 +268,17 @@ router.get('/transactioncollections', function(req, res) {
       res.status(200).json({ message: "Transaction successfully (maybe) deleted" });//will post just b/c the file was ran
     });
   });
+
+    // delete All Transaction
+  // since we are taking the info from the params we need to pass the _id in the URl
+  router.delete('/DeleteAllTransactions', function (req, res) {
+    appUser3.deleteMany({}, (err, note) => { 
+      if (err) {
+        res.status(404).send(err);
+      }
+      res.status(200).json({ message: "All Transaction successfully (maybe) deleted" });//will post just b/c the file was ran
+    });
+  });
   
   // Make Mongoose use `findOneAndUpdate()`. 
   // update one Transaction
