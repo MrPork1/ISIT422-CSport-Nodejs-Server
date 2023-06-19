@@ -24,7 +24,7 @@ const appUser2 = require("../ClassCollections");
 const appUser3 = require("../TransactionCollection");
 const { application } = require('express');
 
-const dbURI = "mongodb+srv://Ironman:DsKn1S5YFvqRiGkA@seansmaincluster.ulkp95p.mongodb.net/";
+const dbURI = "mongodb+srv://Ironman:DsKn1S5YFvqRiGkA@seansmaincluster.ulkp95p.mongodb.net/test?retryWrites=true&w=majority";
 
 const options = {
   maxPoolSize: 50, 
